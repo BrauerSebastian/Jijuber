@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jijuber - Jijos a Domicilio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            color: #1a1a1a;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        .app-header {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 16px 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .nav-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        .nav-btn.primary {
+            background: #1a1a1a;
+            color: #ffffff;
+        }
+
+        .nav-btn.secondary {
+            background: transparent;
+            color: #1a1a1a;
+            border: 1px solid #e0e0e0;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-1px);
+            background: #f0f0f0;
+        }
+
+        .nav-btn.primary:hover {
+            background: #333333;
+        }
+
+        .screen {
+            display: none;
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            min-height: 600px;
+        }
+
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .welcome-screen {
+            text-align: center;
+            padding: 48px 16px;
+        }
+
+        .welcome-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+        }
+
+        .welcome-subtitle {
+            font-size: 16px;
+            color: #666666;
+            margin-bottom: 32px;
+            line-height: 1.5;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .cta-btn {
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 500;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.2s ease;
+            min-width: 160px;
+        }
+
+        .cta-btn.primary {
+            background: #1a1a1a;
+            color: #ffffff;
+        }
+
+        .cta-btn.secondary {
+            background: transparent;
+            color: #1a1a1a;
+            border: 1px solid #e0e0e0;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-1px);
+            background: #f0f0f0;
+        }
+
+        .cta-btn.primary:hover {
+            background: #333333;
+        }
+
+        .search-bar {
+            background: #ffffff;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            background: transparent;
+        }
+
+        .filters {
+            display: flex;
+            gap: 8px;
+            margin: 16px 0;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background: #1a1a1a;
+            color: #ffffff;
+            border-color: #1a1a1a;
+        }
+
+        .peluqueros-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .peluquero-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #ffffff;
+        }
+
+        .peluquero-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .peluquero-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .peluquero-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .peluquero-info h3 {
+            color: #1a1a1a;
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+
+        .rating {
+            color: #f5c518;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .services-list {
+            margin: 12px 0;
+        }
+
+        .service-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+        }
+
+        .price {
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .booking-form {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #1a1a1a;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            margin: 16px 0;
+        }
+
+        .calendar-day {
+            padding: 8px;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .calendar-day:hover,
+        .calendar-day.selected {
+            background: #1a1a1a;
+            color: #ffffff;
+            border-color: #1a1a1a;
+        }
+
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin: 16px 0;
+        }
+
+        .time-slot {
+            padding: 8px;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .time-slot:hover,
+        .time-slot.selected {
+            background: #1a1a1a;
+            color: #ffffff;
+            border-color: #1a1a1a;
+        }
+
+        .ai-preview {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            margin: 16px 0;
+        }
+
+        .upload-area {
+            border: 1px dashed #e0e0e0;
+            border-radius: 8px;
+            padding: 32px;
+            margin: 16px 0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .upload-area:hover {
+            background: #f9f9f9;
+        }
+
+        .preview-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin: 16px 0;
+        }
+
+        .preview-option {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .preview-option:hover,
+        .preview-option.selected {
+            border-color: #1a1a1a;
+            background: #f9f9f9;
+        }
+
+        .profile-section {
+            margin: 16px 0;
+            padding: 16px;
+            background: #ffffff;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .profile-section h3 {
+            margin-bottom: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .back-btn {
+            background: transparent;
+            color: #1a1a1a;
+            border: 1px solid #e0e0e0;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background: #f9f9f9;
+            transform: translateY(-1px);
+        }
+
+        .success-message {
+            text-align: center;
+            padding: 32px;
+            color: #28a745;
+        }
+
+        .success-message h2 {
+            margin-bottom: 16px;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .tracking-info {
+            background: #f9f9f9;
+            padding: 16px;
+            border-radius: 8px;
+            margin: 16px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="app-header">
+            <div class="logo">💇‍♀️ Jijuber</div>
+            <div class="nav-buttons" id="nav-buttons">
+                <button class="nav-btn secondary" onclick="showScreen('login')">Iniciar Sesión</button>
+                <button class="nav-btn primary" onclick="showScreen('register')">Registrarse</button>
+                <button class="nav-btn secondary" onclick="showScreen('peluquero')">Soy Peluquero</button>
+            </div>
+        </div>
+
+        <!-- Pantalla de Bienvenida -->
+        <div class="screen active" id="welcome">
+            <div class="welcome-screen">
+                <h1 class="welcome-title">Belleza a tu Alcance</h1>
+                <p class="welcome-subtitle">
+                    Conectamos a los mejores peluqueros con clientes que buscan comodidad y calidad. 
+                    Servicios de peluquería profesional donde y cuando lo necesites.
+                </p>
+                <div class="cta-buttons">
+                    <button class="cta-btn primary" onclick="showScreen('home')">Buscar Peluquero</button>
+                    <button class="cta-btn secondary" onclick="showScreen('ai-preview')">Probar IA Preview</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pantalla Principal (Home) -->
+        <div class="screen" id="home">
+            <button class="back-btn" onclick="showScreen('welcome')">← Volver</button>
+            
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="Buscar por zona, especialidad o nombre..." oninput="searchPeluqueros()">
+            </div>
+
+            <div class="filters">
+                <button class="filter-btn active" onclick="filterPeluqueros('Todos')">Todos</button>
+                <button class="filter-btn" onclick="filterPeluqueros('Cortes')">Cortes</button>
+                <button class="filter-btn" onclick="filterPeluqueros('Tintes')">Tintes</button>
+                <button class="filter-btn" onclick="filterPeluqueros('Peinados')">Peinados</button>
+                <button class="filter-btn" onclick="filterPeluqueros('Eco-Friendly')">Eco-Friendly</button>
+                <button class="filter-btn" onclick="filterPeluqueros('A Domicilio')">A Domicilio</button>
+                <button class="filter-btn" onclick="filterPeluqueros('En Salón')">En Salón</button>
+            </div>
+
+            <div class="peluqueros-grid" id="peluqueros-grid">
+                <!-- Peluqueros se cargan dinámicamente -->
+            </div>
+        </div>
+
+        <!-- Perfil de Peluquero -->
+        <div class="screen" id="peluquero-profile">
+            <button class="back-btn" onclick="showScreen('home')">← Volver</button>
+            
+            <div id="peluquero-details">
+                <!-- El contenido se genera dinámicamente -->
+            </div>
+        </div>
+
+        <!-- Pantalla de Reserva -->
+        <div class="screen" id="booking">
+            <button class="back-btn" onclick="showScreen('peluquero-profile')">← Volver</button>
+            
+            <div class="booking-form">
+                <h2>Reservar Servicio</h2>
+                
+                <div class="form-group">
+                    <label>Selecciona el Servicio:</label>
+                    <select id="service-select"></select>
+                </div>
+
+                <div class="form-group">
+                    <label>Modalidad:</label>
+                    <select id="modality-select">
+                        <option value="domicilio">A Domicilio (+$500)</option>
+                        <option value="salon">En Salón</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Selecciona la Fecha:</label>
+                    <div class="calendar-grid" id="calendar-grid">
+                        <!-- Días generados dinámicamente -->
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Horario Disponible:</label>
+                    <div class="time-slots" id="time-slots">
+                        <!-- Horarios generados dinámicamente -->
+                    </div>
+                </div>
+
+                <div class="form-group" id="address-group" style="display: none;">
+                    <label>Dirección (si es a domicilio):</label>
+                    <textarea id="address-input" placeholder="Av. Corrientes 1234, CABA"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Comentarios Adicionales:</label>
+                    <textarea id="comments-input" placeholder="Alguna preferencia o requerimiento especial..."></textarea>
+                </div>
+
+                <div class="cta-buttons">
+                    <button class="cta-btn primary" onclick="bookAppointment()">Continuar al Pago</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pantalla de Pago -->
+        <div class="screen" id="payment">
+            <button class="back-btn" onclick="showScreen('booking')">← Volver</button>
+            
+            <div class="booking-form">
+                <h2>Resumen y Pago</h2>
+                
+                <div class="profile-section" id="booking-summary">
+                    <!-- Resumen generado dinámicamente -->
+                </div>
+
+                <div class="form-group">
+                    <label>Método de Pago:</label>
+                    <select id="payment-method">
+                        <option>Mercado Pago</option>
+                        <option>Tarjeta de Crédito</option>
+                        <option>Transferencia</option>
+                        <option>Efectivo</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Cuotas:</label>
+                    <select id="payment-installments">
+                        <option value="1">1 pago</option>
+                        <option value="3">3 cuotas</option>
+                        <option value="6">6 cuotas</option>
+                    </select>
+                </div>
+
+                <div class="cta-buttons">
+                    <button class="cta-btn primary" onclick="confirmBooking()">Confirmar Reserva</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Confirmación -->
+        <div class="screen" id="confirmation">
+            <div class="success-message">
+                <h2>¡Reserva Confirmada! ✅</h2>
+                <p>Tu cita ha sido agendada exitosamente.</p>
+                
+                <div class="tracking-info" id="confirmation-details">
+                    <!-- Detalles generados dinámicamente -->
+                </div>
+
+                <div class="cta-buttons">
+                    <button class="cta-btn primary" onclick="showScreen('tracking')">Ver Estado</button>
+                    <button class="cta-btn secondary" onclick="showScreen('welcome')">Inicio</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pantalla de Tracking -->
+        <div class="screen" id="tracking">
+            <button class="back-btn" onclick="showScreen('confirmation')">← Volver</button>
+            
+            <h2>Estado de tu Servicio</h2>
+            
+            <div class="tracking-info">
+                <h3 id="tracking-status">Peluquero está en camino</h3>
+                <p id="tracking-eta">📍 Tiempo estimado de llegada: 10 minutos</p>
+                <p id="tracking-location">🚗 Ubicación: A 2 cuadras de tu domicilio</p>
+            </div>
+
+            <div class="profile-section">
+                <h3>Chat con tu Peluquero</h3>
+                <div id="chat-messages">
+                    <div style="background: #ffffff; padding: 12px; border-radius: 8px; margin: 8px 0; border: 1px solid #e0e0e0;">
+                        <p><strong>Peluquero:</strong> ¡Hola! Estoy llegando en 5 minutos 😊</p>
+                    </div>
+                    <div style="background: #1a1a1a; color: #ffffff; padding: 12px; border-radius: 8px; margin: 8px 0;">
+                        <p><strong>Tú:</strong> ¡Perfecto! Te espero</p>
+                    </div>
+                </div>
+                <input type="text" id="chat-input" placeholder="Escribe un mensaje..." style="width: 100%; padding: 12px; border: 1px solid #e0e0e0; border-radius: 8px;">
+            </div>
+
+            <div class="cta-buttons">
+                <button class="cta-btn secondary">📞 Llamar</button>
+                <button class="cta-btn primary" onclick="showScreen('rating')">Servicio Completado</button>
+            </div>
+        </div>
+
+        <!-- Pantalla de Calificación -->
+        <div class="screen" id="rating">
+            <div class="booking-form">
+                <h2>¿Cómo estuvo tu experiencia?</h2>
+                
+                <div style="text-align: center; margin: 24px 0;">
+                    <div style="font-size: 32px; margin: 16px 0;" id="rating-stars">
+                        ⭐⭐⭐⭐⭐
+                    </div>
+                    <p id="rating-text">Califica tu experiencia</p>
+                </div>
+
+                <div class="form-group">
+                    <label>Comentarios (opcional):</label>
+                    <textarea id="rating-comments" placeholder="Comparte tu experiencia para ayudar a otros usuarios..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>¿Recomendarías este peluquero?</label>
+                    <div style="text-align: center; margin: 12px 0;">
+                        <button class="nav-btn primary" style="margin: 0 8px;" onclick="setRecommendation(true)">👍 Sí</button>
+                        <button class="nav-btn secondary" style="margin: 0 8px;" onclick="setRecommendation(false)">👎 No</button>
+                    </div>
+                </div>
+
+                <div class="cta-buttons">
+                    <button class="cta-btn primary" onclick="submitRating()">Enviar Calificación</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- IA Preview -->
+        <div class="screen" id="ai-preview">
+            <button class="back-btn" onclick="showScreen('welcome')">← Volver</button>
+            
+            <div class="ai-preview">
+                <h2>Prueba tu Nuevo Look con IA</h2>
+                <p>Sube una foto y ve cómo te verías con diferentes cortes y colores</p>
+                
+                <div class="upload-area" onclick="document.getElementById('photo-input').click()">
+                    <input type="file" id="photo-input" accept="image/*" style="display: none;">
+                    <p style="font-size: 32px; margin-bottom: 8px;">📸</p>
+                    <p>Haz clic para subir tu foto</p>
+                    <p style="font-size: 12px; color: #666666;">JPG, PNG hasta 10MB</p>
+                </div>
+
+                <div class="preview-options">
+                    <div class="preview-option">
+                        <div style="height: 80px; background: #f9f9f9; border-radius: 8px; margin-bottom: 8px; display: flex; align-items: center; justify-content: center;">
+                            <span style="font-size: 24px;">💇‍♀️</span>
+                        </div>
+                        <h4>Bob Clásico</h4>
+                        <p>Corte a la altura del mentón</p>
+                    </div>
+                    
+                    <div class="preview-option selected">
+                        <div style="height: 80px; background: #f9f9f9; border-radius: 8px; margin-bottom: 8px; display: flex; align-items: center; justify-content: center;">
+                            <span style="font-size: 24px;">🌟</span>
+                        </div>
+                        <h4>Balayage Rubio</h4>
+                        <p>Mechas naturales</p>
+                    </div>
+                    
+                    <div class="preview-option">
+                        <div style="height: 80px; background: #f9f9f9; border-radius: 8px; margin-bottom: 8px; display: flex; align-items: center; justify-content: center;">
+                            <span style="font-size: 24px;">✂️</span>
+                        </div>
+                        <h4>Pixie Cut</h4>
+                        <p>Corte moderno y fresco</p>
+                    </div>
+                </div>
+
+                <div class="cta-buttons">
+                    <button class="cta-btn primary" onclick="showScreen('home')">Buscar Peluquero para este Look</button>
+                    <button class="cta-btn secondary">Probar Otro Estilo</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login -->
+        <div class="screen" id="login">
+            <button class="back-btn" onclick="showScreen('welcome')">← Volver</button>
+            
+            <div class="booking-form">
+                <h2>Iniciar Sesión</h2>
+                
+                <div class="form-group">
+                    <label>Email o Teléfono:</label>
+                    <input type="email" id="login-email" placeholder="tu@email.com">
+                </div>
+
+                <div class="form-group">
+                    <label>Contraseña:</label>
+                    <input type="password" id="login-password" placeholder="••••••••">
+                </div>
+
+                <div class="cta-buttons">
+                    <button class="cta-btn primary" onclick="login()">Iniciar Sesión</button>
+                </div>
+
+                <p style="text-align: center; margin-top: 16px; font-size: 14px;">
+                    ¿No tienes cuenta? <a href="#" onclick="showScreen('register')" style="color: #1a1a1a; text-decoration: underline;">Regístrate</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Register -->
+        <div class="screen" id="register">
+            <button class="back-btn" onclick="showScreen('welcome')">← Volver</button>
+            
+            <div class="booking-form">
+                <h2>Crear Cuenta</h2>
+                
+                <div class="form-group">
+                    <label>Nombre Completo:</label>
+                    <input type="text" id="register-name" placeholder="Juan Pérez">
+                </div>
+
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" id="register-email" placeholder="tu@email.com">
+                </div>
+
+                <div class="form-group">
+                    <label>Teléfono:</label>
+                    <input type="tel" id="register-phone" placeholder="+54 11 1234-5678">
+                </div>
+
+                <div class="form-group">
+                    <label>Contraseña:</label>
+                    <input type="password" id="register-password" placeholder="••••••••">
+                </div>
+
+                <div class="form-group">
+                    <label>Confirmar Contraseña:</label>
+                    <input type="password" id="register-confirm-password" placeholder="••••••••">
+                </div>
+
+                <div class="form-group">
+                    <label>Rol:</label>
+                    <select id="register-role">
+                        <option value="client">Cliente</option>
+                        <option value="peluquero">Peluquero</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="peluquero-specialty" style="display: none;">
+                    <label>Especialidad:</label>
+                    <input type="text" id="register-specialty" placeholder="Ej. Especialista en Cortes Eco">
+                </div>
+
+                <div class="form-group" id="peluquero-zone" style="display: none;">
+                    <label>Zona:</label>
+                    <input type="text" id="register-zone" placeholder="Ej. Palermo, CABA">
+                </div>
+
+                <div class="cta-buttons">
+                    <button class="cta-btn primary" onclick="register()">Crear Cuenta</button>
+                </div>
+
+                <p style="text-align: center; margin-top: 16px; font-size: 14px;">
+                    ¿Ya tienes cuenta? <a href="#" onclick="showScreen('login')" style="color: #1a1a1a; text-decoration: underline;">Iniciar Sesión</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Panel Peluquero -->
+        <div class="screen" id="peluquero">
+            <button class="back-btn" onclick="showScreen('welcome')">← Volver</button>
+            
+            <div class="booking-form">
+                <h2>Panel de Peluquero</h2>
+                
+                <div class="profile-section" id="peluquero-appointments">
+                    <h3>Mis Citas de Hoy</h3>
+                    <!-- Citas cargadas dinámicamente -->
+                </div>
+
+                <div class="profile-section">
+                    <h3>Estadísticas</h3>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+                        <div style="text-align: center; background: #ffffff; padding: 16px; border-radius: 8px; border: 1px solid #e0e0e0;">
+                            <h4 style="color: #1a1a1a; font-size: 20px;">4.8</h4>
+                            <p>Rating Promedio</p>
+                        </div>
+                        <div style="text-align: center; background: #ffffff; padding: 16px; border-radius: 8px; border: 1px solid #e0e0e0;">
+                            <h4 style="color: #28a745; font-size: 20px;">156</h4>
+                            <p>Servicios Realizados</p>
+                        </div>
+                        <div style="text-align: center; background: #ffffff; padding: 16px; border-radius: 8px; border: 1px solid #e0e0e0;">
+                            <h4 style="color: #1a1a1a; font-size: 20px;">$45.000</h4>
+                            <p>Ingresos del Mes</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cta-buttons">
+                    <button class="cta-btn primary">Actualizar Disponibilidad</button>
+                    <button class="cta-btn secondary">Ver Historial</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+        let currentUser = null;
+        let selectedPeluquero = null;
+        let selectedAppointment = null;
+
+        // Show/Hide screen
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        // Update navigation based on authentication
+        function updateNavigation() {
+            const navButtons = document.getElementById('nav-buttons');
+            const token = localStorage.getItem('token');
+            if (token) {
+                try {
+                    const decoded = jwt_decode(token);
+                    currentUser = { id: decoded.userId, role: decoded.role };
+                    navButtons.innerHTML = `
+                        <button class="nav-btn secondary" onclick="showScreen('home')">Inicio</button>
+                        ${currentUser.role === 'peluquero' ? `<button class="nav-btn secondary" onclick="showScreen('peluquero')">Panel Peluquero</button>` : ''}
+                        <button class="nav-btn primary" onclick="logout()">Cerrar Sesión</button>
+                    `;
+                    if (currentUser.role === 'peluquero') {
+                        loadPeluqueroAppointments();
+                    }
+                } catch (err) {
+                    console.error('Invalid token:', err);
+                    logout();
+                }
+            } else {
+                navButtons.innerHTML = `
+                    <button class="nav-btn secondary" onclick="showScreen('login')">Iniciar Sesión</button>
+                    <button class="nav-btn primary" onclick="showScreen('register')">Registrarse</button>
+                    <button class="nav-btn secondary" onclick="showScreen('peluquero')">Soy Peluquero</button>
+                `;
+            }
+        }
+
+        // JWT decode function (simplified, include jwt-decode library for production)
+        function jwt_decode(token) {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            return JSON.parse(jsonPayload);
+        }
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('token');
+            currentUser = null;
+            updateNavigation();
+            showScreen('welcome');
+        }
+
+        // Login
+        async function login() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            try {
+                const response = await fetch(`${API_URL}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password }),
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    localStorage.setItem('token', data.token);
+                    currentUser = data.user;
+                    updateNavigation();
+                    showScreen('home');
+                    loadPeluqueros();
+                } else {
+                    alert(data.message);
+                }
+            } catch (err) {
+                alert('Error al iniciar sesión');
+                console.error(err);
+            }
+        }
+
+        // Register
+        async function register() {
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+            const phone = document.getElementById('register-phone').value;
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-confirm-password').value;
+            const role = document.getElementById('register-role').value;
+            const specialty = document.getElementById('register-specialty')?.value;
+            const zone = document.getElementById('register-zone')?.value;
+
+            if (password !== confirmPassword) {
+                alert('Las contraseñas no coinciden');
+                return;
+            }
+
+            const body = { name, email, phone, password, role };
+            if (role === 'peluquero') {
+                body.specialty = specialty || 'General';
+                body.zone = zone || 'Unknown';
+                body.services = [
+                    { name: 'Corte Clásico', price: 5000 },
+                    { name: 'Tinte Ecológico', price: 8000 },
+                ];
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body),
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    alert('Registro exitoso, por favor inicia sesión');
+                    showScreen('login');
+                } else {
+                    alert(data.message);
+                }
+            } catch (err) {
+                alert('Error al registrarse');
+                console.error(err);
+            }
+        }
+
+        // Load Peluqueros
+        async function loadPeluqueros() {
+            try {
+                const response = await fetch(`${API_URL}/peluqueros`);
+                const peluqueros = await response.json();
+                const grid = document.getElementById('peluqueros-grid');
+                grid.innerHTML = peluqueros.map(p => `
+                    <div class="peluquero-card" onclick="showPeluqueroProfile('${p._id}')">
+                        <div class="peluquero-header">
+                            <div class="peluquero-avatar">${p.userId.name.slice(0, 2).toUpperCase()}</div>
+                            <div class="peluquero-info">
+                                <h3>${p.userId.name}</h3>
+                                <div class="rating">⭐ ${p.rating} (${p.reviews} reseñas)</div>
+                                <p>${p.specialty}</p>
+                            </div>
+                        </div>
+                        <div class="services-list">
+                            ${p.services.map(s => `
+                                <div class="service-item">
+                                    <span>${s.name}</span>
+                                    <span class="price">$${s.price}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <p><strong>Zona:</strong> ${p.zone}</p>
+                    </div>
+                `).join('');
+            } catch (err) {
+                console.error('Error loading peluqueros:', err);
+            }
+        }
+
+        // Filter Peluqueros
+        function filterPeluqueros(filter) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            const searchTerm = document.querySelector('.search-input').value.toLowerCase();
+            const cards = document.querySelectorAll('.peluquero-card');
+            cards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                const matchesFilter = filter === 'Todos' || text.includes(filter.toLowerCase());
+                const matchesSearch = text.includes(searchTerm);
+                card.style.display = matchesFilter && matchesSearch ? 'block' : 'none';
+            });
+        }
+
+        // Search Peluqueros
+        function searchPeluqueros() {
+            const activeFilter = document.querySelector('.filter-btn.active')?.textContent || 'Todos';
+            filterPeluqueros(activeFilter);
+        }
+
+        // Show Peluquero Profile
+        async function showPeluqueroProfile(peluqueroId) {
+            try {
+                const response = await fetch(`${API_URL}/peluqueros/${peluqueroId}`);
+                const profile = await response.json();
+                selectedPeluquero = profile;
+                const detailsContainer = document.getElementById('peluquero-details');
+                
+                detailsContainer.innerHTML = `
+                    <div class="peluquero-header" style="margin-bottom: 24px;">
+                        <div class="peluquero-avatar" style="width: 64px; height: 64px; font-size: 24px;">${profile.userId.name.slice(0, 2).toUpperCase()}</div>
+                        <div class="peluquero-info">
+                            <h2>${profile.userId.name}</h2>
+                            <div class="rating" style="font-size: 14px;">⭐ ${profile.rating} (${profile.reviews} reseñas)</div>
+                            <p style="font-size: 14px; color: #1a1a1a; font-weight: 500;">${profile.specialty}</p>
+                            <p><strong>Zona:</strong> ${profile.zone}</p>
+                        </div>
+                    </div>
+
+                    <div class="profile-section">
+                        <h3>Sobre mí</h3>
+                        <p>${profile.about || 'Peluquero profesional con experiencia en diversos servicios.'}</p>
+                    </div>
+
+                    <div class="profile-section">
+                        <h3>Servicios</h3>
+                        <div class="services-list">
+                            ${profile.services.map(service => `
+                                <div class="service-item">
+                                    <span>${service.name}</span>
+                                    <span class="price">$${service.price}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div class="profile-section">
+                        <h3>Galería de Trabajos</h3>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+                            ${(profile.gallery || ['Trabajo 1', 'Trabajo 2', 'Trabajo 3']).map(work => `
+                                <div style="background: #f9f9f9; height: 100px; border-radius: 8px; display: flex; align-items: center; justify-content: center; text-align: center; padding: 8px;">
+                                    <p style="font-size: 12px;">${work}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div class="profile-section">
+                        <h3>Reseñas Recientes</h3>
+                        <div style="background: #ffffff; padding: 12px; border-radius: 8px; margin: 8px 0; border: 1px solid #e0e0e0;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <strong>Ana M.</strong>
+                                <span style="color: #f5c518;">⭐⭐⭐⭐⭐</span>
+                            </div>
+                            <p>"Excelente profesional, muy recomendable. El corte quedó perfecto y el trato fue súper amable."</p>
+                        </div>
+                        <div style="background: #ffffff; padding: 12px; border-radius: 8px; margin: 8px 0; border: 1px solid #e0e0e0;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <strong>Luis P.</strong>
+                                <span style="color: #f5c518;">⭐⭐⭐⭐⭐</span>
+                            </div>
+                            <p>"Muy puntual y profesional. El servicio a domicilio es genial, lo recomiendo 100%."</p>
+                        </div>
+                    </div>
+
+                    <div class="cta-buttons">
+                        <button class="cta-btn primary" onclick="selectPeluquero('${peluqueroId}'); showScreen('booking')">Reservar Cita</button>
+                        <button class="cta-btn secondary">💬 Enviar Mensaje</button>
+                    </div>
+                `;
+
+                // Populate booking form
+                const serviceSelect = document.getElementById('service-select');
+                serviceSelect.innerHTML = profile.services.map(s => `<option value="${s.name}">${s.name} - $${s.price}</option>`).join('');
+                populateCalendar();
+                populateTimeSlots();
+                updateAddressField();
+
+                showScreen('peluquero-profile');
+            } catch (err) {
+                console.error('Error loading peluquero profile:', err);
+            }
+        }
+
+        // Select Peluquero
+        function selectPeluquero(peluqueroId) {
+            selectedPeluquero = { _id: peluqueroId };
+        }
+
+        // Populate Calendar (simple example)
+        function populateCalendar() {
+            const calendarGrid = document.getElementById('calendar-grid');
+            const today = new Date();
+            calendarGrid.innerHTML = '';
+            for (let i = 0; i < 7; i++) {
+                const date = new Date(today.getFullYear(), today.getMonth(), today.getDate() + i);
+                const day = date.getDate();
+                calendarGrid.innerHTML += `<div class="calendar-day${i === 2 ? ' selected' : ''}" onclick="selectDate('${date.toISOString()}', this)">${day}</div>`;
+            }
+        }
+
+        // Select Date
+        function selectDate(date, element) {
+            document.querySelectorAll('.calendar-day').forEach(day => day.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedAppointment = { ...selectedAppointment, date };
+            populateTimeSlots();
+        }
+
+        // Populate Time Slots
+        function populateTimeSlots() {
+            const timeSlots = document.getElementById('time-slots');
+            const times = ['10:00', '11:30', '14:00', '16:00', '17:30', '19:00'];
+            timeSlots.innerHTML = times.map(time => `
+                <div class="time-slot${time === '14:00' ? ' selected' : ''}" onclick="selectTime('${time}', this)">${time}</div>
+            `).join('');
+        }
+
+        // Select Time
+        function selectTime(time, element) {
+            document.querySelectorAll('.time-slot').forEach(slot => slot.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedAppointment = { ...selectedAppointment, time };
+        }
+
+        // Update Address Field Visibility
+        function updateAddressField() {
+            const modality = document.getElementById('modality-select').value;
+            document.getElementById('address-group').style.display = modality === 'domicilio' ? 'block' : 'none';
+        }
+
+        // Book Appointment
+        async function bookAppointment() {
+            if (!localStorage.getItem('token')) {
+                alert('Por favor, inicia sesión para reservar');
+                showScreen('login');
+                return;
+            }
+
+            const service = document.getElementById('service-select').value;
+            const modality = document.getElementById('modality-select').value;
+            const address = document.getElementById('address-input').value;
+            selectedAppointment = {
+                ...selectedAppointment,
+                peluqueroId: selectedPeluquero._id,
+                service,
+                modality,
+                address: modality === 'domicilio' ? address : null,
+            };
+
+            // Calculate total
+            const selectedService = selectedPeluquero.services.find(s => s.name === service);
+            const total = modality === 'domicilio' ? selectedService.price + 500 : selectedService.price;
+
+            // Show payment summary
+            document.getElementById('booking-summary').innerHTML = `
+                <h3>Resumen de la Reserva</h3>
+                <p><strong>Peluquero:</strong> ${selectedPeluquero.userId.name}</p>
+                <p><strong>Servicio:</strong> ${service}</p>
+                <p><strong>Fecha:</strong> ${new Date(selectedAppointment.date).toLocaleDateString()}</p>
+                <p><strong>Hora:</strong> ${selectedAppointment.time}</p>
+                <p><strong>Modalidad:</strong> ${modality === 'domicilio' ? 'A Domicilio' : 'En Salón'}</p>
+                <p><strong>Total:</strong> $${total}</p>
+            `;
+            selectedAppointment.total = total;
+
+            showScreen('payment');
+        }
+
+        // Confirm Booking
+        async function confirmBooking() {
+            try {
+                const response = await fetch(`${API_URL}/appointments`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    },
+                    body: JSON.stringify(selectedAppointment),
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    document.getElementById('confirmation-details').innerHTML = `
+                        <h3>Detalles de tu Cita</h3>
+                        <p><strong>Peluquero:</strong> ${selectedPeluquero.userId.name}</p>
+                        <p><strong>Fecha:</strong> ${new Date(data.appointment.date).toLocaleDateString()} - ${data.appointment.time}</p>
+                        <p><strong>Servicio:</strong> ${data.appointment.service}</p>
+                        <p><strong>Dirección:</strong> ${data.appointment.address || 'En Salón'}</p>
+                    `;
+                    showScreen('confirmation');
+                } else {
+                    alert(data.message);
+                }
+            } catch (err) {
+                alert('Error al confirmar la reserva');
+                console.error(err);
+            }
+        }
+
+        // Load Peluquero Appointments
+        async function loadPeluqueroAppointments() {
+            try {
+                const response = await fetch(`${API_URL}/appointments`, {
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+                });
+                const appointments = await response.json();
+                const container = document.getElementById('peluquero-appointments');
+                container.innerHTML = `
+                    <h3>Mis Citas de Hoy</h3>
+                    ${appointments.length ? appointments.map(a => `
+                        <div style="background: #ffffff; padding: 12px; border-radius: 8px; margin: 8px 0; border: 1px solid #e0e0e0;">
+                            <p><strong>${a.time} - Cliente</strong></p>
+                            <p>Servicio: ${a.service}</p>
+                            <p>${a.modality === 'domicilio' ? `Dirección: ${a.address}` : 'Modalidad: En Salón'}</p>
+                            <button class="nav-btn primary" style="margin-top: 8px;">Ver Detalles</button>
+                        </div>
+                    `).join('') : '<p>No hay citas para hoy</p>'}
+                `;
+            } catch (err) {
+                console.error('Error loading appointments:', err);
+            }
+        }
+
+        // Set Recommendation
+        function setRecommendation(recommend) {
+            selectedAppointment.recommend = recommend;
+        }
+
+        // Submit Rating
+        function submitRating() {
+            // Implement rating submission if backend endpoint is added
+            alert('Calificación enviada (funcionalidad no implementada en backend)');
+            showScreen('welcome');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateNavigation();
+            loadPeluqueros();
+
+            // Filter interaction
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    filterPeluqueros(this.textContent);
+                });
+            });
+
+            // Time slot and calendar interaction
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('time-slot')) {
+                    selectTime(e.target.textContent, e.target);
+                }
+                if (e.target.classList.contains('calendar-day')) {
+                    selectDate(e.target.getAttribute('data-date'), e.target);
+                }
+                if (e.target.classList.contains('preview-option')) {
+                    document.querySelectorAll('.preview-option').forEach(option => option.classList.remove('selected'));
+                    e.target.classList.add('selected');
+                }
+            });
+
+            // Photo upload simulation
+            document.getElementById('photo-input').addEventListener('change', function(e) {
+                if (e.target.files.length > 0) {
+                    const uploadArea = document.querySelector('.upload-area');
+                    uploadArea.innerHTML = `
+                        <p style="font-size: 32px; margin-bottom: 8px;">✅</p>
+                        <p>Foto cargada exitosamente</p>
+                        <p style="font-size: 12px; color: #666666;">Procesando con IA...</p>
+                    `;
+                    setTimeout(() => {
+                        uploadArea.innerHTML = `
+                            <p style="font-size: 32px; margin-bottom: 8px;">🎨</p>
+                            <p>¡Listo! Elige un estilo abajo</p>
+                            <p style="font-size: 12px; color: #666666;">Haz clic para cambiar foto</p>
+                        `;
+                    }, 2000);
+                }
+            });
+
+            // Modality change
+            document.getElementById('modality-select')?.addEventListener('change', updateAddressField);
+
+            // Role change for registration
+            document.getElementById('register-role')?.addEventListener('change', function() {
+                const isPeluquero = this.value === 'peluquero';
+                document.getElementById('peluquero-specialty').style.display = isPeluquero ? 'block' : 'none';
+                document.getElementById('peluquero-zone').style.display = isPeluquero ? 'block' : 'none';
+            });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/lib/jwt-decode.min.js"></script>
+</body>
+</html>
